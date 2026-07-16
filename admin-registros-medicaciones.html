@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GestorResi - Registro de Medicaciones</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col font-sans">
+
+    <nav
+        class="bg-white border-b border-slate-200 px-6 py-4 shadow-sm flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center gap-3">
+            <a href="menu.html"
+                class="text-xl font-bold text-sky-600 font-mono tracking-wider hover:opacity-80 transition-opacity">🏢
+                GESTOR RESI</a>
+            <span
+                class="bg-indigo-50 text-indigo-700 text-xs px-2.5 py-0.5 rounded-full font-medium border border-indigo-200">
+                Auditoría de Administración de Fármacos
+            </span>
+        </div>
+        <div>
+            <a href="administracion.html"
+                class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold px-4 py-2 rounded-lg border border-slate-300 transition-colors">
+                &larr; Volver a Administración
+            </a>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto p-6 w-full flex-grow flex flex-col justify-start">
+
+        <div class="mb-6 border-b border-slate-200 pb-5">
+            <h1 class="text-2xl font-bold text-slate-700 tracking-normal">Histórico de Administración de Medicación</h1>
+            <p class="text-xs text-slate-400 mt-1">Supervisión y control de tomas farmacológicas ejecutadas, incidencias
+                de rechazo o medicaciones omitidas por el personal de enfermería y gerocultura.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+            <div class="lg:col-span-4 space-y-4">
+                <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm space-y-4">
+                    <div class="flex flex-col gap-1 border-b border-slate-100 pb-2">
+                        <h3 class="text-xs font-bold text-slate-600 uppercase tracking-wider">🔍 Panel de Control</h3>
+                        <p class="text-[11px] text-slate-400">Audita tomas por residente en tiempo real o busca
+                            registros específicos.</p>
+                    </div>
+
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-xs font-semibold text-slate-600">Buscador en Vivo</label>
+                        <input type="text" id="buscador-registro-medicacion"
+                            placeholder="🔍 Residente, medicamento, observaciones..."
+                            class="bg-white border border-slate-200 text-xs p-2.5 rounded-xl w-full focus:outline-none focus:border-indigo-500 shadow-sm">
+                    </div>
+
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-xs font-semibold text-slate-600">Filtrar por Fecha Específica</label>
+                        <input type="date" id="filtro-fecha-medicacion"
+                            class="bg-white border border-slate-200 text-xs p-2.5 rounded-xl w-full focus:outline-none focus:border-indigo-500 shadow-sm">
+                    </div>
+
+                    <div class="flex gap-2">
+                        <button id="btn-restaurar-tomas"
+                            class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs py-2 rounded-xl border border-slate-200 transition-all">
+                            Restaurar Filtros
+                        </button>
+                    </div>
+
+                    <div
+                        class="text-[10px] text-slate-400 font-medium leading-relaxed bg-slate-50 p-3 rounded-xl border border-slate-200">
+                        ⚠️ <strong>Seguridad Sanitaria:</strong> La alteración o eliminación de un registro de toma de
+                        medicamentos afecta directamente al expediente clínico legal del centro. Hágalo exclusivamente
+                        bajo duplicados.
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-8 space-y-4">
+
+                <div class="flex justify-between items-center px-1">
+                    <h2 class="text-xs font-bold text-slate-600 uppercase tracking-wider">Libro General de Suministro de
+                        Fármacos</h2>
+                    <span id="contador-tomas"
+                        class="text-[11px] font-bold text-indigo-700 bg-indigo-50 border border-indigo-200 px-2.5 py-0.5 rounded-full">0
+                        tomas registradas</span>
+                </div>
+
+                <div id="contenedor-registros-medicacion" class="space-y-4 max-h-[650px] overflow-y-auto pr-2">
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <div id="modal-auditar-toma"
+        class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center z-50 p-4">
+        <div
+            class="bg-white rounded-2xl border border-slate-200 max-w-md w-full p-6 shadow-xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-2">
+                <h3 class="text-xs font-bold text-slate-600 uppercase tracking-wider flex items-center gap-1.5">📝
+                    Rectificar Registro de Toma</h3>
+                <button onclick="cerrarModalAuditoria()"
+                    class="text-slate-400 hover:text-slate-600 font-bold text-lg">&times;</button>
+            </div>
+
+            <div class="space-y-3.5">
+                <div class="flex flex-col gap-1.5">
+                    <label class="text-xs font-semibold text-slate-600">Estado de la Toma</label>
+                    <select id="modal-estado-toma"
+                        class="bg-slate-50 border border-slate-200 text-xs p-2.5 rounded-xl w-full focus:outline-none focus:bg-white focus:ring-1 focus:ring-indigo-500 font-semibold text-slate-700">
+                        <option value="REALIZADO">REALIZADO / Hecho</option>
+                        <option value="PENDIENTE">PENDIENTE</option>
+                        <option value="RECHAZADO">RECHAZADO POR EL RESIDENTE</option>
+                        <option value="OMITIDO">OMITIDO / AUSENTE</option>
+                    </select>
+                </div>
+
+                <div class="flex flex-col gap-1.5">
+                    <label class="text-xs font-semibold text-slate-600">Anotaciones / Justificación de Estado</label>
+                    <textarea id="modal-observaciones-toma" rows="4"
+                        class="w-full bg-slate-50 border border-slate-200 text-xs p-3 rounded-xl focus:outline-none focus:bg-white focus:ring-1 focus:ring-indigo-500 resize-none font-medium text-slate-700"
+                        placeholder="Escribe observaciones adicionales o motivos del rechazo..."></textarea>
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-2 pt-2 border-t border-slate-100">
+                <button onclick="cerrarModalAuditoria()"
+                    class="bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-xs px-4 py-2 rounded-xl transition-colors">Cancelar</button>
+                <button id="btn-guardar-auditoria-toma"
+                    class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs px-4 py-2 rounded-xl shadow transition-colors">Guardar
+                    Rectificación</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-white border-t border-slate-200 py-3 text-center text-xs text-slate-400 mt-auto">
+        <div class="flex justify-center items-center gap-1.5">
+            <span class="w-2.5 h-2.5 bg-indigo-500 rounded-full animate-pulse"></span>
+            <span>Módulo de Control y Suministro de Fármacos Activo</span>
+        </div>
+    </footer>
+
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/admin-registros-medicaciones.js"></script>
+</body>
+
+</html>

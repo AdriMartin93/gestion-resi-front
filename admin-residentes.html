@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GestorResi - Gestión de Residentes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col font-sans">
+
+    <nav class="bg-white border-b border-slate-200 px-6 py-4 shadow-sm flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center gap-3">
+            <a href="menu.html" class="text-xl font-bold text-sky-600 font-mono tracking-wider hover:opacity-80 transition-opacity">🏢 GESTOR RESI</a>
+            <span class="bg-emerald-50 text-emerald-700 text-xs px-2.5 py-0.5 rounded-full font-medium border border-emerald-200">
+                Auditoría de Expedientes
+            </span>
+        </div>
+        <div>
+            <a href="administracion.html" class="btn-secondary px-4 py-2 flex items-center gap-2 text-xs normal-case border-slate-600 text-slate-600 hover:text-slate-700 hover:border-slate-700">
+                &larr; Volver a Administración
+            </a>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto p-6 w-full flex-grow flex flex-col justify-start">
+        
+        <div class="mb-6 border-b border-slate-200 pb-5">
+            <h1 class="text-2xl font-bold text-slate-700 tracking-normal">Expedientes de Residentes</h1>
+            <p class="text-xs text-slate-400 mt-1">Alta, baja, modificación de datos personales e información de contacto de las personas residentes.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            
+            <div class="lg:col-span-5 space-y-4">
+                <div class="flex justify-between items-center px-1">
+                    <h2 class="text-xs font-bold text-slate-600 uppercase tracking-wider">Residentes de Alta</h2>
+                    <span id="contador-residentes" class="text-[11px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">0 expedientes</span>
+                </div>
+                
+                <input type="text" id="buscador-admin-residente" placeholder="🔍 Buscar por nombre, apellidos o habitación..." class="input-premium bg-white text-xs w-full shadow-sm">
+
+                <div id="lista-admin-residentes" class="space-y-3 max-h-[600px] overflow-y-auto pr-1">
+                    </div>
+            </div>
+
+            <div class="lg:col-span-7">
+                <div id="panel-vacio-residente" class="card-premium p-12 text-center text-slate-400 italic text-xs space-y-2">
+                    <span class="text-3xl block">📋</span>
+                    <p>Selecciona un expediente de la lista para ver o modificar su ficha de datos.</p>
+                </div>
+
+                <div id="formulario-edicion-residente" class="hidden card-premium p-6 space-y-4">
+                    <div class="flex justify-between items-center border-b border-slate-200 pb-3">
+                        <h2 class="text-sm font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
+                            <span class="p-1 bg-emerald-50 rounded text-emerald-600">👤</span> Ficha de Identidad
+                        </h2>
+                        <span id="txt-id-residente" class="text-[10px] font-mono font-bold bg-slate-100 px-2 py-0.5 rounded text-slate-400">ID: N/A</span>
+                    </div>
+
+                    <form id="form-actualizar-residente" class="space-y-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="flex flex-col gap-1.5">
+                                <label class="text-xs font-semibold text-slate-600">Nombre</label>
+                                <input type="text" name="nombre" id="edit-nombre" class="input-premium bg-white text-xs" required>
+                            </div>
+                            <div class="flex flex-col gap-1.5">
+                                <label class="text-xs font-semibold text-slate-600">Apellidos</label>
+                                <input type="text" name="apellidos" id="edit-apellidos" class="input-premium bg-white text-xs" required>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <div class="flex flex-col gap-1.5">
+                                <label class="text-xs font-semibold text-slate-600">DNI / NIE</label>
+                                <input type="text" name="dni" id="edit-dni" class="input-premium bg-white text-xs" required>
+                            </div>
+                            <div class="flex flex-col gap-1.5">
+                                <label class="text-xs font-semibold text-slate-600">Tarjeta Sanitaria (TIS)</label>
+                                <input type="text" name="tis" id="edit-tis" class="input-premium bg-white text-xs" required>
+                            </div>
+                            <div class="flex flex-col gap-1.5">
+                                <label class="text-xs font-semibold text-slate-600">Habitación asignada</label>
+                                <input type="text" name="habitacion" id="edit-habitacion" class="input-premium bg-white text-xs" required>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col gap-1.5">
+                            <label class="text-xs font-semibold text-slate-600">Fecha de Nacimiento</label>
+                            <input type="date" name="fechaNacimiento" id="edit-fechaNacimiento" class="input-premium bg-white text-xs" required>
+                        </div>
+
+                        <div class="flex flex-col sm:flex-row gap-3 pt-2 border-t border-slate-100">
+                            <button type="submit" class="flex-grow bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs uppercase tracking-wider py-2.5 rounded-xl shadow transition-all">
+                                Guardar Modificaciones
+                            </button>
+                            <button type="button" id="btn-eliminar-residente" class="bg-red-50 text-red-600 border border-red-200 hover:bg-red-100 font-bold text-xs uppercase tracking-wider px-4 py-2.5 rounded-xl transition-all">
+                                Dar de Baja Expediente
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/admin-residentes.js"></script>
+</body>
+
+</html>

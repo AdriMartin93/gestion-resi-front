@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GestorResi - Registro de Incidencias</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col font-sans">
+
+    <nav class="bg-white border-b border-slate-200 px-6 py-4 shadow-sm flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center gap-3">
+            <a href="menu.html" class="text-xl font-bold text-sky-600 font-mono tracking-wider hover:opacity-80 transition-opacity">🏢 GESTOR RESI</a>
+            <span class="bg-orange-50 text-orange-700 text-xs px-2.5 py-0.5 rounded-full font-medium border border-orange-200">
+                Auditoría y Registro de Incidencias
+            </span>
+        </div>
+        <div>
+            <a href="administracion.html" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold px-4 py-2 rounded-lg border border-slate-300 transition-colors">
+                &larr; Volver a Administración
+            </a>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto p-6 w-full flex-grow flex flex-col justify-start">
+        
+        <div class="mb-6 border-b border-slate-200 pb-5">
+            <h1 class="text-2xl font-bold text-slate-700 tracking-normal">Libro de Incidencias de la Residencia</h1>
+            <p class="text-xs text-slate-400 mt-1">Supervisión de anomalías conductuales, incidencias médicas, técnicas o logísticas reportadas por el equipo de guardia.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            
+            <div class="lg:col-span-4 space-y-4">
+                <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm space-y-4">
+                    <div class="flex flex-col gap-1 border-b border-slate-100 pb-2">
+                        <h3 class="text-xs font-bold text-slate-600 uppercase tracking-wider">🎯 Enfoque de Auditoría</h3>
+                        <p class="text-[11px] text-slate-400">Filtra el libro para un residente o visualiza el listado global.</p>
+                    </div>
+
+                    <button id="btn-mostrar-todo" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs py-2.5 rounded-xl border border-slate-300 transition-all">
+                        📋 Ver Histórico Global
+                    </button>
+
+                    <div class="border-t border-slate-100 pt-3 flex justify-between items-center px-1">
+                        <span class="text-xs font-bold text-slate-600 uppercase tracking-wider">Filtrar por Afectado</span>
+                        <span id="contador-residentes" class="text-[10px] font-bold text-orange-600 bg-orange-50 border border-orange-100 px-2 py-0.5 rounded-full">0 res.</span>
+                    </div>
+
+                    <input type="text" id="buscador-incidencias-residente" placeholder="🔍 Filtrar residente por nombre..." class="bg-white border border-slate-200 text-xs p-2.5 rounded-xl w-full focus:outline-none focus:border-orange-500 shadow-sm">
+
+                    <div id="lista-incidencias-residentes" class="space-y-2.5 max-h-[400px] overflow-y-auto pr-1">
+                        </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-8 space-y-4">
+                
+                <div class="flex justify-between items-center px-1">
+                    <h2 id="titulo-vista-incidencias" class="text-xs font-bold text-slate-600 uppercase tracking-wider">Histórico Completo de Eventos</h2>
+                    <span id="contador-incidencias" class="text-[11px] font-bold text-orange-600 bg-orange-50 border border-orange-200 px-2.5 py-0.5 rounded-full">0 reportes</span>
+                </div>
+
+                <div id="contenedor-feeder-incidencias" class="space-y-4 max-h-[650px] overflow-y-auto pr-2">
+                    </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 py-3 text-center text-xs text-slate-400 mt-auto">
+        <div class="flex justify-center items-center gap-1.5">
+            <span class="w-2.5 h-2.5 bg-orange-500 rounded-full animate-pulse"></span>
+            <span>Módulo de Auditoría de Incidencias Activo (Spring Boot Server)</span>
+        </div>
+    </footer>
+
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/admin-incidencias.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GestorResi - Auditoría de Cocina</title>
+    <!-- Tailwind CSS por CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Hoja de estilos global profesional -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col font-sans">
+
+    <!-- Barra de Navegación Superior -->
+    <nav
+        class="bg-white border-b border-slate-200 px-6 py-4 shadow-sm flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center gap-3">
+            <a href="menu.html"
+                class="text-xl font-bold text-sky-600 font-mono tracking-wider hover:opacity-80 transition-opacity">🏢
+                GESTOR RESI</a>
+            <span
+                class="bg-yellow-50 text-yellow-700 text-xs px-2.5 py-0.5 rounded-full font-medium border border-yellow-200">
+                Auditoría Higiénico-Sanitaria APPCC
+            </span>
+        </div>
+        <div>
+            <a href="administracion.html"
+                class="btn-secondary px-4 py-2 flex items-center gap-2 text-xs normal-case border-slate-600 text-slate-600 hover:text-slate-700 hover:border-slate-700">
+                &larr; Volver a Administración
+            </a>
+        </div>
+    </nav>
+
+    <!-- Contenedor Principal -->
+    <main class="max-w-6xl mx-auto p-6 w-full flex-grow flex flex-col justify-start">
+
+        <div class="mb-6 border-b border-slate-200 pb-5">
+            <h1 class="text-2xl font-bold text-slate-700 tracking-normal">Histórico de Controles de Cocina</h1>
+            <p class="text-xs text-slate-400 mt-1">Inspección acumulativa del cumplimiento de prerrequisitos sanitarios,
+                cadena de frío y trazabilidad de muestras testigo.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+            <!-- PANEL IZQUIERDO: ESTADISTICAS -->
+            <div class="lg:col-span-4 space-y-4">
+                <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm space-y-4">
+                    <div class="flex flex-col gap-1 border-b border-slate-100 pb-2">
+                        <h3 class="text-xs font-bold text-slate-600 uppercase tracking-wider">📊 Libro de Registro
+                            Sanitario</h3>
+                        <p class="text-[11px] text-slate-400">Trazabilidad obligatoria frente a inspecciones de sanidad
+                            externas.</p>
+                    </div>
+
+                    <div
+                        class="flex justify-between items-center bg-yellow-50/40 p-3 rounded-xl border border-yellow-100">
+                        <span class="text-xs font-semibold text-slate-600">Inspecciones Archivadas:</span>
+                        <span id="contador-controles-cocina"
+                            class="text-xs font-bold text-yellow-700 bg-yellow-100/80 px-2.5 py-0.5 rounded-full">0
+                            partes</span>
+                    </div>
+
+                    <div
+                        class="text-[10px] text-slate-400 font-medium leading-relaxed bg-slate-50 p-3 rounded-xl border border-slate-200">
+                        📋 <strong>Seguridad Alimentaria:</strong> Al eliminar un parte, se purgan de forma definitiva
+                        todos los registros diarios de temperaturas y desinfección del cuadrante.
+                    </div>
+                </div>
+            </div>
+
+            <!-- FEED CRONOLÓGICO DE INSPECCIONES -->
+            <div class="lg:col-span-8 space-y-3">
+                <h2 class="text-xs font-bold text-slate-600 uppercase tracking-wider px-1">Historial del Plan de
+                    Autocontrol</h2>
+
+                <div id="contenedor-historico-admin-cocina" class="space-y-4 max-h-[650px] overflow-y-auto pr-2">
+                    <!-- Las tarjetas se inyectarán dinámicamente -->
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 py-3 text-center text-xs text-slate-400 mt-auto">
+        <div class="flex justify-center items-center gap-1.5">
+            <span class="w-2.5 h-2.5 bg-yellow-500 rounded-full animate-pulse"></span>
+            <span>Archivo Digital Sanitario Sincronizado</span>
+        </div>
+    </footer>
+
+    <!-- Scripts del Sistema -->
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/admin-cocina.js"></script>
+</body>
+
+</html>

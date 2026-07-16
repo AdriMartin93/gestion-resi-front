@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GestorResi - Partes Diarios</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col font-sans">
+
+    <nav class="bg-white border-b border-slate-200 px-6 py-4 shadow-sm flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center gap-3">
+            <a href="menu.html" class="text-xl font-bold text-sky-600 font-mono tracking-wider hover:opacity-80 transition-opacity">🏢 GESTOR RESI</a>
+            <span class="bg-amber-50 text-amber-700 text-xs px-2.5 py-0.5 rounded-full font-medium border border-amber-200">
+                Auditoría de Partes Diarios
+            </span>
+        </div>
+        <div>
+            <a href="administracion.html" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold px-4 py-2 rounded-lg border border-slate-300 transition-colors">
+                &larr; Volver a Administración
+            </a>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto p-6 w-full flex-grow flex flex-col justify-start">
+        
+        <div class="mb-6 border-b border-slate-200 pb-5 flex justify-between items-end">
+            <div>
+                <h1 class="text-2xl font-bold text-slate-700 tracking-normal">Libro de Partes Diarios de la Residencia</h1>
+                <p class="text-xs text-slate-400 mt-1">Supervisión, rectificación de actas de turno y control de bitácoras del centro de mayores.</p>
+            </div>
+            <span id="contador-partes" class="text-xs font-bold text-amber-700 bg-amber-50 border border-amber-200 px-3 py-1 rounded-full">
+                0 partes registrados
+            </span>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            
+            <div class="lg:col-span-4 space-y-4">
+                <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm space-y-4">
+                    <div class="flex flex-col gap-1 border-b border-slate-100 pb-2">
+                        <h3 class="text-xs font-bold text-slate-600 uppercase tracking-wider">📊 Control de Actas</h3>
+                        <p class="text-[11px] text-slate-400">Los partes recogen el resumen general de acontecimientos del centro.</p>
+                    </div>
+
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-xs font-semibold text-slate-600">Filtrar por Creador (ID de Empleado)</label>
+                        <div class="flex gap-2">
+                            <input type="number" id="filtro-empleado-id" placeholder="Ej: 3" class="bg-white border border-slate-200 text-xs p-2.5 rounded-xl w-full focus:outline-none focus:border-amber-500 shadow-sm">
+                            <button id="btn-filtrar-empleado" class="bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs px-4 rounded-xl transition-all shadow-sm">
+                                Filtrar
+                            </button>
+                        </div>
+                    </div>
+
+                    <button id="btn-limpiar-partes" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs py-2 rounded-xl border border-slate-200 transition-all">
+                        Mostrar Todos los Días
+                    </button>
+
+                    <div class="text-[10px] text-slate-400 font-medium leading-relaxed bg-slate-50 p-3 rounded-xl border border-slate-200">
+                        ⚠️ <strong>Nota de Redacción:</strong> Si detecta un error de transcripción o información confidencial errónea, use el botón de <strong>editar texto</strong> para corregirlo de manera directa en el servidor.
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-8 space-y-4">
+                <div id="contenedor-partes-diarios" class="space-y-4 max-h-[650px] overflow-y-auto pr-2">
+                    </div>
+            </div>
+
+        </div>
+    </main>
+
+    <div id="modal-editar-parte" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl border border-slate-200 max-w-lg w-full p-6 shadow-xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                <h3 class="text-sm font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
+                    📝 Rectificar Resumen Diario
+                </h3>
+                <button onclick="cerrarModalEdicion()" class="text-slate-400 hover:text-slate-600 font-bold text-lg">&times;</button>
+            </div>
+            
+            <div class="space-y-3">
+                <div class="text-[11px] text-slate-400">
+                    <span class="font-bold text-slate-600" id="modal-fecha-parte">Parte del --/--/----</span> • Redactado por <span class="font-bold text-slate-600" id="modal-creador-parte">--</span>
+                </div>
+                
+                <textarea id="modal-textarea-contenido" rows="8" class="w-full bg-slate-50 border border-slate-200 text-xs p-3 rounded-xl focus:outline-none focus:bg-white focus:ring-1 focus:ring-amber-400 resize-none font-medium text-slate-700" placeholder="Escribe la corrección del parte diario aquí..."></textarea>
+            </div>
+
+            <div class="flex justify-end gap-2 pt-2 border-t border-slate-100">
+                <button onclick="cerrarModalEdicion()" class="bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-xs px-4 py-2 rounded-xl transition-colors">
+                    Cancelar
+                </button>
+                <button id="btn-guardar-correccion" class="bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs px-4 py-2 rounded-xl shadow transition-colors">
+                    Guardar Cambios
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-white border-t border-slate-200 py-3 text-center text-xs text-slate-400 mt-auto">
+        <div class="flex justify-center items-center gap-1.5">
+            <span class="w-2.5 h-2.5 bg-amber-500 rounded-full animate-pulse"></span>
+            <span>Módulo de Auditoría de Bitácora Activo</span>
+        </div>
+    </footer>
+
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/admin-partes-diarios.js"></script>
+</body>
+
+</html>

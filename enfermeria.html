@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GestorResi - Registro de Enfermería</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col font-sans">
+
+    <nav
+        class="bg-white border-b border-slate-200 px-6 py-4 shadow-sm flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center gap-3">
+            <a href="menu.html"
+                class="text-xl font-bold text-sky-600 font-mono tracking-wider hover:opacity-80 transition-opacity">🏢
+                GESTOR RESI</a>
+            <span
+                class="bg-rose-50 text-rose-700 text-xs px-2.5 py-0.5 rounded-full font-medium border border-rose-200">
+                Módulo Clínico
+            </span>
+        </div>
+        <div>
+            <a href="menu.html" class="btn-secondary px-4 py-2 flex items-center gap-2 text-xs normal-case">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+                Volver al Menú
+            </a>
+        </div>
+    </nav>
+
+    <main class="max-w-5xl mx-auto p-6 w-full flex-grow flex flex-col justify-start">
+
+        <div class="mb-6 border-b border-slate-200 pb-5">
+            <h1 class="text-2xl font-bold text-slate-700 tracking-normal">Registros de Enfermería</h1>
+            <p class="text-xs text-slate-400 mt-1">Evolución, constantes, glucemias e incidencias médicas de los
+                residentes.</p>
+        </div>
+
+        <div id="seccion-seleccion" class="space-y-6">
+            <div class="flex justify-between items-center px-1">
+                <div>
+                    <h2 class="text-sm font-bold text-slate-600 uppercase tracking-wider">Seleccionar Residentes para la
+                        Consulta</h2>
+                    <p class="text-xs text-slate-400 mt-0.5">Haz clic sobre las tarjetas para marcar a los residentes
+                        que vas a evaluar.</p>
+                </div>
+                <span id="contador-seleccionados"
+                    class="text-xs font-bold text-sky-600 bg-sky-50 border border-sky-200 px-2.5 py-1 rounded-full whitespace-nowrap">0
+                    seleccionados</span>
+            </div>
+
+            <div id="grid-residentes" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+            </div>
+
+            <div class="flex justify-end pt-2">
+                <button id="btn-iniciar-flujo" disabled
+                    class="btn-primary px-6 py-2.5 text-xs opacity-50 cursor-not-allowed">
+                    Comenzar Evaluación Clínicas
+                </button>
+            </div>
+        </div>
+
+        <div id="seccion-formularios" class="hidden space-y-6">
+
+            <div
+                class="bg-slate-800 text-white p-4 rounded-2xl flex flex-col sm:flex-row justify-between items-center gap-4 shadow-md">
+                <div class="flex items-center gap-3">
+                    <div class="p-2 bg-slate-700 rounded-xl text-rose-400">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z">
+                            </path>
+                        </svg>
+                    </div>
+                    <div>
+                        <span class="text-[10px] text-slate-400 block uppercase font-bold tracking-wider"
+                            id="info-progreso">Residente 0 de 0</span>
+                        <h2 class="text-base font-bold tracking-tight" id="nombre-residente-activo">Cargando...</h2>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-3 w-full sm:w-auto justify-end">
+                    <button id="btn-guardar-parte"
+                        class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs uppercase tracking-wider px-5 py-2.5 rounded-lg shadow transition-colors">
+                        Guardar Registro
+                    </button>
+                    <button id="btn-siguiente"
+                        class="bg-slate-700 hover:bg-slate-600 border border-slate-600 p-2.5 rounded-lg transition-colors flex items-center justify-center text-rose-400"
+                        title="Siguiente Residente">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="card-premium p-6">
+                <form id="form-enfermeria" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="flex flex-col gap-1.5 md:col-span-1">
+                        <label class="text-xs font-semibold text-slate-600">Tipo de Acción Clínica</label>
+                        <select name="tipoAccion" id="select-tipo-accion" class="input-premium bg-white font-medium"
+                            required></select>
+                    </div>
+                    <div class="flex flex-col gap-1.5 md:col-span-2">
+                        <label class="text-xs font-semibold text-slate-600">Evolución u Observaciones Clínicas</label>
+                        <input type="text" name="observacion"
+                            placeholder="Detalla las curas realizadas, constantes tomadas (TA, FC, Tª), etc..."
+                            class="input-premium bg-white" required>
+                    </div>
+                </form>
+            </div>
+
+            <div class="space-y-4">
+                <button id="btn-toggle-historial"
+                    class="w-full bg-white border border-slate-200 hover:border-rose-400 hover:bg-rose-50/10 p-3 rounded-xl flex items-center justify-center gap-2 font-bold text-xs text-slate-600 hover:text-rose-600 transition-all shadow-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01m-.01 4h.01">
+                        </path>
+                    </svg>
+                    📋 Ver Historial de Registros Previos
+                </button>
+
+                <div id="panel-historial-clinico" class="hidden card-premium p-6 space-y-3 bg-slate-50/50">
+                    <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider">Historial Clínico del
+                        Residente</h3>
+                    <div id="contenedor-linea-vida" class="space-y-3 max-h-[300px] overflow-y-auto pr-1">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/enfermeria.js"></script>
+</body>
+
+</html>

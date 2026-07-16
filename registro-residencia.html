@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GestorResi - Registro de Residencia</title>
+    <!-- Tailwind CSS por CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Hoja de estilos global profesional -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-center items-center p-6">
+
+    <div class="max-w-2xl w-full bg-white p-8 rounded-2xl border border-slate-200 shadow-xl card-premium">
+        <div class="mb-6">
+            <a href="index.html" class="text-xs text-sky-600 hover:underline font-semibold">← Volver al inicio</a>
+            <h2 class="text-xl font-bold text-slate-700 mt-2">Alta del Centro y Administrador General</h2>
+        </div>
+
+        <form id="form-registro" class="space-y-6">
+            <!-- SECCIÓN: EMPRESA -->
+            <div class="border-b border-slate-200 pb-5">
+                <h3 class="text-xs font-bold text-sky-600 uppercase tracking-wider mb-3"> Datos de la Residencia </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs text-slate-500 mb-1 font-medium">Nombre Comercial</label>
+                        <input id="emp-nombre" type="text" required
+                            class="w-full input-premium">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-500 mb-1 font-medium">CIF (Ej: A1234567B)</label>
+                        <input id="emp-cif" type="text" required
+                            class="w-full input-premium">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-xs text-slate-500 mb-1 font-medium">Email de la Empresa</label>
+                        <input id="emp-email" type="email" required
+                            class="w-full input-premium">
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECCIÓN: ADMINISTRADOR -->
+            <div>
+                <h3 class="text-xs font-bold text-sky-600 uppercase tracking-wider mb-3"> Cuenta del Director / Administrador</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs text-slate-500 mb-1 font-medium">Nombre</label>
+                        <input id="adm-nombre" type="text" required
+                            class="w-full input-premium">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-500 mb-1 font-medium">Apellidos</label>
+                        <input id="adm-apellidos" type="text" required
+                            class="w-full input-premium">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-500 mb-1 font-medium">DNI</label>
+                        <input id="adm-dni" type="text" required
+                            class="w-full input-premium">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-500 mb-1 font-medium">Nombre de Usuario</label>
+                        <input id="adm-usuario" type="text" required
+                            class="w-full input-premium">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-500 mb-1 font-medium">Email Personal</label>
+                        <input id="adm-email" type="email" required
+                            class="w-full input-premium">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-slate-500 mb-1 font-medium">Contraseña</label>
+                        <input id="adm-pass" type="password" required
+                            class="w-full input-premium">
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit"
+                class="w-full btn-primary text-white font-bold py-3 mt-2 shadow-md">
+                Registrar Residencia
+            </button>
+        </form>
+    </div>
+
+    <!-- Scripts del Sistema -->
+    <script src="js/config.js"></script>
+    <script src="js/registro-residencia.js"></script>
+</body>
+
+</html>

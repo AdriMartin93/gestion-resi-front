@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GestorResi - Intervención Psicológica</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col font-sans">
+
+    <nav class="bg-white border-b border-slate-200 px-6 py-4 shadow-sm flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center gap-3">
+            <a href="menu.html" class="text-xl font-bold text-sky-600 font-mono tracking-wider hover:opacity-80 transition-opacity">🏢 GESTOR RESI</a>
+            <span class="bg-violet-50 text-violet-700 text-xs px-2.5 py-0.5 rounded-full font-medium border border-violet-200">
+                Auditoría del Departamento de Psicología
+            </span>
+        </div>
+        <div>
+            <a href="administracion.html" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold px-4 py-2 rounded-lg border border-slate-300 transition-colors">
+                &larr; Volver a Administración
+            </a>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto p-6 w-full flex-grow flex flex-col justify-start">
+        
+        <div class="mb-6 border-b border-slate-200 pb-5">
+            <h1 class="text-2xl font-bold text-slate-700 tracking-normal">Histórico de Registros de Psicología</h1>
+            <p class="text-xs text-slate-400 mt-1">Supervisión de terapias cognitivas, valoraciones conductuales, talleres de estimulación y control de participantes de las sesiones.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            
+            <div class="lg:col-span-4 space-y-4">
+                <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm space-y-4">
+                    <div class="flex flex-col gap-1 border-b border-slate-100 pb-2">
+                        <h3 class="text-xs font-bold text-slate-600 uppercase tracking-wider">🔍 Filtros de Intervención</h3>
+                        <p class="text-[11px] text-slate-400">Filtra las sesiones grupales o individuales por un residente en particular.</p>
+                    </div>
+
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-xs font-semibold text-slate-600">Residente Participante</label>
+                        <select id="filtro-residente-psicologia" class="bg-white border border-slate-200 text-xs p-2.5 rounded-xl w-full focus:outline-none focus:border-violet-500 shadow-sm">
+                            <option value="">-- Todos los Residentes --</option>
+                        </select>
+                    </div>
+
+                    <div class="flex gap-2">
+                        <button id="btn-limpiar-filtros-psicologia" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs py-2 rounded-xl border border-slate-200 transition-all">
+                            Restablecer Libro General
+                        </button>
+                    </div>
+
+                    <div class="text-[10px] text-slate-400 font-medium leading-relaxed bg-slate-50 p-3 rounded-xl border border-slate-200">
+                        ⚠️ <strong>Gestión de Sesiones:</strong> Como administrador, puede incorporar o remover participantes en vivo de las actas psicológicas registradas, así como rectificar la memoria descriptiva de la sesión.
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-8 space-y-4">
+                
+                <div class="flex justify-between items-center px-1">
+                    <h2 class="text-xs font-bold text-slate-600 uppercase tracking-wider">Diario de Sesiones E Intervenciones</h2>
+                    <span id="contador-sesiones-psicologia" class="text-[11px] font-bold text-violet-700 bg-violet-50 border border-violet-200 px-2.5 py-0.5 rounded-full">0 sesiones</span>
+                </div>
+
+                <div id="contenedor-sesiones-psicologia" class="space-y-4 max-h-[650px] overflow-y-auto pr-2">
+                    </div>
+            </div>
+
+        </div>
+    </main>
+
+    <div id="modal-editar-desc-psico" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl border border-slate-200 max-w-lg w-full p-6 shadow-xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-2">
+                <h3 class="text-xs font-bold text-slate-600 uppercase tracking-wider flex items-center gap-1">📝 Corregir Informe de Sesión</h3>
+                <button onclick="cerrarModalPsico()" class="text-slate-400 hover:text-slate-600 font-bold text-lg">&times;</button>
+            </div>
+            <textarea id="modal-text-desc-psico" rows="6" class="w-full bg-slate-50 border border-slate-200 text-xs p-3 rounded-xl focus:outline-none focus:bg-white focus:ring-1 focus:ring-violet-500 resize-none font-medium text-slate-700" placeholder="Edita el informe descriptivo del evolutivo..."></textarea>
+            <div class="flex justify-end gap-2 pt-2 border-t border-slate-100">
+                <button onclick="cerrarModalPsico()" class="bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-xs px-4 py-2 rounded-xl transition-colors">Cancelar</button>
+                <button id="btn-guardar-desc-psico" class="bg-violet-600 hover:bg-violet-700 text-white font-bold text-xs px-4 py-2 rounded-xl shadow transition-colors">Guardar Cambios</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-white border-t border-slate-200 py-3 text-center text-xs text-slate-400 mt-auto">
+        <div class="flex justify-center items-center gap-1.5">
+            <span class="w-2.5 h-2.5 bg-violet-500 rounded-full animate-pulse"></span>
+            <span>Módulo de Control y Evolutivos de Psicología Activo</span>
+        </div>
+    </footer>
+
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/admin-psicologia.js"></script>
+</body>
+
+</html>

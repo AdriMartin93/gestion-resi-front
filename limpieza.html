@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GestorResi - Registro de Limpieza y Desinfección</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col font-sans">
+
+    <nav class="bg-white border-b border-slate-200 px-6 py-4 shadow-sm flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center gap-3">
+            <a href="menu.html" class="text-xl font-bold text-sky-600 font-mono tracking-wider hover:opacity-80 transition-opacity">🏢 GESTOR RESI</a>
+            <span class="bg-cyan-50 text-cyan-700 text-xs px-2.5 py-0.5 rounded-full font-medium border border-cyan-200">
+                Registro de Higiene y Limpieza
+            </span>
+        </div>
+        <div>
+            <a href="menu.html" class="btn-secondary px-4 py-2 flex items-center gap-2 text-xs normal-case border-cyan-600 text-cyan-600 hover:text-cyan-700 hover:border-cyan-700">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+                Volver al Menú
+            </a>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto p-6 w-full flex-grow flex flex-col justify-start">
+        
+        <div class="mb-6 border-b border-slate-200 pb-5">
+            <h1 class="text-2xl font-bold text-slate-700 tracking-normal">Control de Higiene e Instalaciones</h1>
+            <p class="text-xs text-slate-400 mt-1">Supervisión de protocolos sanitarios sectorizados, lavandería y trazabilidad de limpieza preventiva.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            
+            <div class="lg:col-span-7 space-y-6">
+                <div class="card-premium p-6 space-y-4">
+                    <h2 class="text-sm font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
+                        <span class="p-1 bg-cyan-50 rounded text-cyan-600">✨</span> Nuevo Parte de Trabajo
+                    </h2>
+
+                    <form id="form-limpieza" class="space-y-4">
+                        <div class="flex flex-col gap-1.5">
+                            <label class="text-xs font-semibold text-slate-600">Área / Sector de Actuación</label>
+                            <select id="select-tipo-zona" class="input-premium bg-white font-medium text-xs w-full" required>
+                                <option value="" disabled selected>Selecciona el área que has limpiado...</option>
+                                <option value="HABITACION">🛏️ Habitaciones y Aseos Privados</option>
+                                <option value="COMUN">🛋️ Zonas Comunes / Pasillos / Ascensores</option>
+                                <option value="CLINICA">🩺 Área Clínica / Salas de Consulta</option>
+                                <option value="ROPA">🧺 Gestión de Lavandería y Ropa</option>
+                            </select>
+                        </div>
+
+                        <div id="contenedor-tareas-dinamicas" class="hidden bg-slate-50 border border-slate-200 p-4 rounded-xl space-y-3">
+                            </div>
+
+                        <div class="flex flex-col gap-1.5">
+                            <label class="text-xs font-semibold text-slate-600">Observaciones e Incidencias del Turno</label>
+                            <textarea name="observaciones" id="observaciones" rows="3" placeholder="Falta de stock, roturas encontradas, desinfecciones especiales efectuadas..." class="input-premium bg-white w-full text-xs resize-none leading-relaxed"></textarea>
+                        </div>
+
+                        <button type="submit" id="btn-guardar-limpieza" class="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-bold text-xs uppercase tracking-wider py-3 rounded-xl shadow transition-all">
+                            Enviar y Registrar Parte
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="lg:col-span-5 space-y-4">
+                <div class="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm space-y-3">
+                    <div class="flex flex-col gap-1">
+                        <h3 class="text-xs font-bold text-slate-600 uppercase tracking-wider">🔍 Filtros de Trazabilidad</h3>
+                        <p class="text-[11px] text-slate-400">Consulta partes anteriores por fecha del cuadrante.</p>
+                    </div>
+                    
+                    <div class="flex gap-2">
+                        <input type="date" id="filtro-fecha" class="input-premium bg-white text-xs flex-grow">
+                        <button id="btn-filtrar-fecha" class="bg-slate-800 hover:bg-slate-900 text-white font-bold text-xs px-4 py-2 rounded-lg shadow transition-all">
+                            Filtrar
+                        </button>
+                        <button id="btn-limpiar-filtro" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs px-3 py-2 rounded-lg border border-slate-200 transition-all">
+                            Ver Todos
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card-premium p-5 space-y-3 bg-slate-50/50">
+                    <div class="flex justify-between items-center border-b border-slate-200 pb-2">
+                        <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider">Histórico de Registros</h4>
+                        <span id="contador-registros" class="text-[10px] font-bold bg-slate-200 text-slate-700 px-2 py-0.5 rounded-full">0 partes</span>
+                    </div>
+                    
+                    <div id="contenedor-historico-limpieza" class="space-y-3 max-h-[420px] overflow-y-auto pr-1">
+                        </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 py-3 text-center text-xs text-slate-400 mt-auto">
+        <div class="flex justify-center items-center gap-1.5">
+            <span class="w-2.5 h-2.5 bg-cyan-500 rounded-full animate-pulse"></span>
+            <span>Módulo Sincronizado con Spring Boot</span>
+        </div>
+    </footer>
+
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/limpieza.js"></script>
+</body>
+
+</html>

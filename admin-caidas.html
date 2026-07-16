@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GestorResi - Auditoría de Caídas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col font-sans">
+
+    <nav class="bg-white border-b border-slate-200 px-6 py-4 shadow-sm flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center gap-3">
+            <a href="menu.html" class="text-xl font-bold text-sky-600 font-mono tracking-wider hover:opacity-80 transition-opacity">🏢 GESTOR RESI</a>
+            <span class="bg-red-50 text-red-700 text-xs px-2.5 py-0.5 rounded-full font-medium border border-red-200">
+                Auditoría de Siniestralidad y Seguridad
+            </span>
+        </div>
+        <div>
+            <a href="administracion.html" class="btn-secondary px-4 py-2 flex items-center gap-2 text-xs normal-case border-slate-600 text-slate-600 hover:text-slate-700 hover:border-slate-700">
+                &larr; Volver a Administración
+            </a>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto p-6 w-full flex-grow flex flex-col justify-start">
+        
+        <div class="mb-6 border-b border-slate-200 pb-5">
+            <h1 class="text-2xl font-bold text-slate-700 tracking-normal">Histórico General de Incidentes y Caídas</h1>
+            <p class="text-xs text-slate-400 mt-1">Supervisión acumulativa de la residencia, control de partes de accidentes graves y depuración de registros médicos erróneos.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            
+            <div class="lg:col-span-4 space-y-4">
+                <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm space-y-4">
+                    <div class="flex flex-col gap-1 border-b border-slate-100 pb-2">
+                        <h3 class="text-xs font-bold text-slate-600 uppercase tracking-wider">📊 Resumen Estadístico</h3>
+                        <p class="text-[11px] text-slate-400">Total de eventos adversos declarados por el personal.</p>
+                    </div>
+                    
+                    <div class="flex justify-between items-center bg-red-50/40 p-3 rounded-xl border border-red-100">
+                        <span class="text-xs font-semibold text-slate-600">Incidentes Totales:</span>
+                        <span id="contador-caidas" class="text-xs font-bold text-red-700 bg-red-100/80 px-2.5 py-0.5 rounded-full">0 partes</span>
+                    </div>
+
+                    <div class="text-[10px] text-slate-400 font-medium leading-relaxed bg-slate-50 p-3 rounded-xl border border-slate-200">
+                        ⚠️ <strong>Nota de Seguridad Legal:</strong> La eliminación de un parte de caída elimina los datos de mecánica y las consecuencias registradas. Realice esta acción únicamente si se trata de un registro duplicado o de pruebas.
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-8 space-y-3">
+                <h2 class="text-xs font-bold text-slate-600 uppercase tracking-wider px-1">Libro de Declaración de Accidentes</h2>
+                
+                <div id="contenedor-historico-caidas" class="space-y-4 max-h-[650px] overflow-y-auto pr-2">
+                    </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 py-3 text-center text-xs text-slate-400 mt-auto">
+        <div class="flex justify-center items-center gap-1.5">
+            <span class="w-2.5 h-2.5 bg-red-500 rounded-full animate-pulse"></span>
+            <span>Módulo de Auditoría de Siniestralidad Activo</span>
+        </div>
+    </footer>
+
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/admin-caidas.js"></script>
+</body>
+
+</html>

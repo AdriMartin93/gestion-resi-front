@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GestorResi - Trabajo Social</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col font-sans">
+
+    <!-- Barra de Navegación -->
+    <nav class="bg-white border-b border-slate-200 px-6 py-4 shadow-sm flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center gap-3">
+            <a href="menu.html" class="text-xl font-bold text-sky-600 font-mono tracking-wider hover:opacity-80 transition-opacity">🏢 GESTOR RESI</a>
+            <span class="bg-fuchsia-50 text-fuchsia-700 text-xs px-2.5 py-0.5 rounded-full font-medium border border-fuchsia-200">
+                Auditoría del Departamento de Trabajo Social
+            </span>
+        </div>
+        <div>
+            <a href="administracion.html" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold px-4 py-2 rounded-lg border border-slate-300 transition-colors">
+                &larr; Volver a Administración
+            </a>
+        </div>
+    </nav>
+
+    <!-- Contenedor Principal -->
+    <main class="max-w-7xl mx-auto p-6 w-full flex-grow flex flex-col justify-start">
+        
+        <div class="mb-6 border-b border-slate-200 pb-5">
+            <h1 class="text-2xl font-bold text-slate-700 tracking-normal">Registros Sociales y Expedientes</h1>
+            <p class="text-xs text-slate-400 mt-1">Supervisión de intervenciones familiares, gestión de la ley de dependencia, recursos y alertas sociales.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            
+            <!-- COLUMNA IZQUIERDA: LISTA DE RESIDENTES -->
+            <div class="lg:col-span-4 space-y-4">
+                <div class="flex justify-between items-center px-1">
+                    <h2 class="text-xs font-bold text-slate-600 uppercase tracking-wider">Fichero de Residentes</h2>
+                    <span id="contador-residentes" class="text-[11px] font-bold text-fuchsia-600 bg-fuchsia-50 border border-fuchsia-200 px-2.5 py-0.5 rounded-full">0 expedientes</span>
+                </div>
+                
+                <input type="text" id="buscador-sociales-residente" placeholder="🔍 Buscar residente por nombre o habitación..." class="bg-white border border-slate-200 text-xs p-2.5 rounded-xl w-full focus:outline-none focus:border-fuchsia-500 shadow-sm">
+
+                <div id="lista-sociales-residentes" class="space-y-3 max-h-[600px] overflow-y-auto pr-1">
+                    <!-- Dinámico con JS -->
+                </div>
+            </div>
+
+            <!-- COLUMNA DERECHA: EXPEDIENTE SOCIAL Y TRÁMITES -->
+            <div class="lg:col-span-8 space-y-4">
+                
+                <!-- Panel Vacío -->
+                <div id="panel-social-vacio" class="bg-white border border-slate-200 rounded-2xl p-12 text-center text-slate-400 italic text-xs space-y-2 shadow-sm">
+                    <span class="text-3xl block">📁</span>
+                    <p>Selecciona un residente en el fichero para auditar sus trámites sociales activos.</p>
+                </div>
+
+                <!-- Panel Activo -->
+                <div id="panel-social-activo" class="hidden space-y-4">
+                    
+                    <!-- Identificación -->
+                    <div class="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm flex justify-between items-center">
+                        <div>
+                            <h2 id="residente-nombre-social" class="text-sm font-bold text-slate-700 uppercase tracking-wide">Expediente Social Abierto</h2>
+                            <p id="residente-meta-social" class="text-[10px] text-slate-400 mt-0.5">Cargando...</p>
+                        </div>
+                        <span id="contador-tramites" class="text-[10px] font-bold text-fuchsia-700 bg-fuchsia-50 border border-fuchsia-200 px-2.5 py-0.5 rounded-full">
+                            0 registros
+                        </span>
+                    </div>
+
+                    <!-- Listado Cronológico de Gestiones -->
+                    <div id="contenedor-registros-sociales" class="space-y-4 max-h-[600px] overflow-y-auto pr-2">
+                        <!-- Renderizado de tarjetas por JS -->
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- MODAL DE EDICIÓN DEL ESTADO DEL TRÁMITE (PATCH) -->
+    <div id="modal-estado-tramite" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl border border-slate-200 max-w-sm w-full p-6 shadow-xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-2">
+                <h3 class="text-xs font-bold text-slate-600 uppercase tracking-wider">🔄 Actualizar Trámite</h3>
+                <button onclick="cerrarModalSocial()" class="text-slate-400 hover:text-slate-600 font-bold text-lg">&times;</button>
+            </div>
+            
+            <div class="space-y-3">
+                <div class="flex flex-col gap-1.5">
+                    <label class="text-xs font-semibold text-slate-600">Nuevo Estado de Resolución</label>
+                    <select id="modal-select-estado" class="bg-slate-50 border border-slate-200 text-xs p-2.5 rounded-xl w-full focus:outline-none focus:ring-1 focus:ring-fuchsia-500 font-semibold text-slate-700">
+                        <option value="INICIADO">Iniciado / En Curso</option>
+                        <option value="EN_ESPERA">En Espera de Resolución</option>
+                        <option value="RESUELTO_FAVORABLE">Resuelto Favorable</option>
+                        <option value="DENEGADO">Denegado</option>
+                        <option value="CERRADO">Cerrado / Archivado</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-2 pt-2 border-t border-slate-100">
+                <button onclick="cerrarModalSocial()" class="bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-xs px-4 py-2 rounded-xl transition-colors">Cancelar</button>
+                <button id="btn-guardar-estado" class="bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-bold text-xs px-4 py-2 rounded-xl shadow transition-colors">Confirmar Estado</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE EDICIÓN DE GESTIONES DESCRIPTIVAS (PATCH) -->
+    <div id="modal-gestiones-tramite" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl border border-slate-200 max-w-lg w-full p-6 shadow-xl space-y-4 animate-in fade-in zoom-in-95 duration-150">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-2">
+                <h3 class="text-xs font-bold text-slate-600 uppercase tracking-wider">📝 Corregir Gestiones / Memoria</h3>
+                <button onclick="cerrarModalGestiones()" class="text-slate-400 hover:text-slate-600 font-bold text-lg">&times;</button>
+            </div>
+            
+            <textarea id="modal-text-gestiones" rows="6" class="w-full bg-slate-50 border border-slate-200 text-xs p-3 rounded-xl focus:outline-none focus:bg-white focus:ring-1 focus:ring-fuchsia-500 resize-none font-medium text-slate-700"></textarea>
+
+            <div class="flex justify-end gap-2 pt-2 border-t border-slate-100">
+                <button onclick="cerrarModalGestiones()" class="bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-xs px-4 py-2 rounded-xl transition-colors">Cancelar</button>
+                <button id="btn-guardar-gestiones" class="bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-bold text-xs px-4 py-2 rounded-xl shadow transition-colors">Guardar Documento</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-white border-t border-slate-200 py-3 text-center text-xs text-slate-400 mt-auto">
+        <div class="flex justify-center items-center gap-1.5">
+            <span class="w-2.5 h-2.5 bg-fuchsia-500 rounded-full animate-pulse"></span>
+            <span>Módulo de Control de Trabajo Social Activo</span>
+        </div>
+    </footer>
+
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/admin-sociales.js"></script>
+</body>
+
+</html>

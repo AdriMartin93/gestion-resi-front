@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GestorResi - Parte Diario</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col font-sans">
+
+    <nav
+        class="bg-white border-b border-slate-200 px-6 py-4 shadow-sm flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center gap-3">
+            <a href="menu.html"
+                class="text-xl font-bold text-sky-600 font-mono tracking-wider hover:opacity-80 transition-opacity">🏢
+                GESTOR RESI</a>
+            <span
+                class="bg-amber-50 text-amber-700 text-xs px-2.5 py-0.5 rounded-full font-medium border border-amber-200">
+                Informes Generales
+            </span>
+        </div>
+        <div>
+            <a href="menu.html" class="btn-secondary px-4 py-2 flex items-center gap-2 text-xs normal-case">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+                Volver al Menú
+            </a>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto p-6 w-full flex-grow flex flex-col justify-start">
+
+        <div class="mb-6 border-b border-slate-200 pb-5">
+            <h1 class="text-2xl font-bold text-slate-700 tracking-normal">Parte Diario</h1>
+            <p class="text-xs text-slate-400 mt-1">Registro y consulta del transcurso general de la jornada en la
+                residencia.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+            <div class="lg:col-span-5 card-premium p-6 space-y-4">
+                <h2 class="text-sm font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
+                    <span class="p-1 bg-amber-50 rounded text-amber-600">📝</span> Redactar Parte de Hoy
+                </h2>
+
+                <form id="form-parte-diario" class="space-y-4">
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-xs font-semibold text-slate-600">Fecha del Informe</label>
+                        <input type="date" id="input-fecha" name="fecha" class="input-premium bg-white w-full" required>
+                    </div>
+
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-xs font-semibold text-slate-600">Contenido general de la jornada</label>
+                        <textarea id="txt-contenido" name="contenido" rows="8" maxlength="2000"
+                            placeholder="Introduce las novedades del turno, incidencias colectivas, visitas o resúmenes de relevancia aquí..."
+                            class="input-premium bg-white w-full resize-none leading-relaxed" required></textarea>
+                        <div class="text-right text-[10px] text-slate-400 font-medium" id="char-counter">0 / 2000
+                            caracteres</div>
+                    </div>
+
+                    <button type="submit" class="btn-primary w-full py-3 text-xs tracking-wider">
+                        Guardar Parte Diario
+                    </button>
+                </form>
+            </div>
+
+            <div class="lg:col-span-7 card-premium p-6 space-y-4">
+                <h2 class="text-sm font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
+                    <span class="p-1 bg-sky-50 rounded text-sky-600">📋</span> Historial de Partes
+                </h2>
+
+                <div id="lista-partes-diarios" class="space-y-4 max-h-[500px] overflow-y-auto pr-2">
+                    <p class="text-center text-sm text-slate-400 italic py-8">Cargando histórico de partes...</p>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/parte-diario.js"></script>
+</body>
+
+</html>

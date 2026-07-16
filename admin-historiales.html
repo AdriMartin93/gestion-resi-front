@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GestorResi - Historiales Clínicos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col font-sans">
+
+    <!-- Barra de Navegación -->
+    <nav class="bg-white border-b border-slate-200 px-6 py-4 shadow-sm flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center gap-3">
+            <a href="menu.html" class="text-xl font-bold text-sky-600 font-mono tracking-wider hover:opacity-80 transition-opacity">🏢 GESTOR RESI</a>
+            <span class="bg-cyan-50 text-cyan-700 text-xs px-2.5 py-0.5 rounded-full font-medium border border-cyan-200">
+                Auditoría Clínica y Sanitaria
+            </span>
+        </div>
+        <div>
+            <a href="administracion.html" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold px-4 py-2 rounded-lg border border-slate-300 transition-colors">
+                &larr; Volver a Administración
+            </a>
+        </div>
+    </nav>
+
+    <!-- Contenedor Principal -->
+    <main class="max-w-7xl mx-auto p-6 w-full flex-grow flex flex-col justify-start">
+        
+        <div class="mb-6 border-b border-slate-200 pb-5">
+            <h1 class="text-2xl font-bold text-slate-700 tracking-normal">Historiales Clínicos y Médicos</h1>
+            <p class="text-xs text-slate-400 mt-1">Gestión de antecedentes clínicos, grupos sanguíneos, dietas pautadas, movilidad y control de alergias.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            
+            <!-- COLUMNA IZQUIERDA: BUSCADOR Y LISTA DE RESIDENTES -->
+            <div class="lg:col-span-4 space-y-4">
+                <div class="flex justify-between items-center px-1">
+                    <h2 class="text-xs font-bold text-slate-600 uppercase tracking-wider">Fichero de Residentes</h2>
+                    <span id="contador-residentes" class="text-[11px] font-bold text-cyan-600 bg-cyan-50 border border-cyan-200 px-2.5 py-0.5 rounded-full">0 expedientes</span>
+                </div>
+                
+                <input type="text" id="buscador-clinico-residente" placeholder="🔍 Buscar por nombre, apellidos o habitación..." class="bg-white border border-slate-200 text-xs p-2.5 rounded-xl w-full focus:outline-none focus:border-cyan-500 shadow-sm">
+
+                <div id="lista-clinico-residentes" class="space-y-3 max-h-[600px] overflow-y-auto pr-1">
+                    <!-- Se carga dinámicamente con JS -->
+                </div>
+            </div>
+
+            <!-- COLUMNA DERECHA: EXPEDIENTE MÉDICO COMPLETO -->
+            <div class="lg:col-span-8">
+                <div id="panel-clinico-vacio" class="bg-white border border-slate-200 rounded-2xl p-12 text-center text-slate-400 italic text-xs space-y-2 shadow-sm">
+                    <span class="text-3xl block">🩺</span>
+                    <p>Selecciona un residente de la lista izquierda para cargar su historial clínico.</p>
+                </div>
+
+                <div id="expediente-clinico" class="hidden bg-white border border-slate-200 p-6 rounded-2xl shadow-sm space-y-5">
+                    
+                    <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                        <div>
+                            <h2 id="residente-nombre-completo" class="text-sm font-bold text-slate-700 uppercase tracking-wide">Ficha Médica</h2>
+                            <p id="residente-meta-datos" class="text-[10px] text-slate-400 mt-0.5">Cargando detalles...</p>
+                        </div>
+                        <span id="txt-id-historial" class="text-[10px] font-mono font-bold bg-slate-100 px-2 py-0.5 rounded text-slate-400">ID Historial: N/A</span>
+                    </div>
+
+                    <!-- FORMULARIO PRINCIPAL: PUT UPDATE -->
+                    <form id="form-historial-clinico" class="space-y-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <!-- Grupo Sanguíneo -->
+                            <div class="flex flex-col gap-1.5">
+                                <label class="text-xs font-semibold text-slate-600">Grupo Sanguíneo</label>
+                                <input type="text" id="med-grupo-sanguineo" class="bg-white border border-slate-200 text-xs p-2.5 rounded-xl focus:outline-none focus:border-cyan-500" placeholder="Ej: A+">
+                            </div>
+                            <!-- Dieta -->
+                            <div class="flex flex-col gap-1.5">
+                                <label class="text-xs font-semibold text-slate-600">Dieta Pautada</label>
+                                <input type="text" id="med-dieta" class="bg-white border border-slate-200 text-xs p-2.5 rounded-xl focus:outline-none focus:border-cyan-500" placeholder="Ej: Hiposódica, Blanda">
+                            </div>
+                            <!-- Movilidad -->
+                            <div class="flex flex-col gap-1.5">
+                                <label class="text-xs font-semibold text-slate-600">Nivel de Movilidad</label>
+                                <input type="text" id="med-movilidad" class="bg-white border border-slate-200 text-xs p-2.5 rounded-xl focus:outline-none focus:border-cyan-500" placeholder="Ej: Silla de ruedas, Autónomo">
+                            </div>
+                        </div>
+
+                        <!-- Antecedentes Médicos (Textarea) -->
+                        <div class="flex flex-col gap-1.5">
+                            <label class="text-xs font-semibold text-slate-600">Antecedentes Clínicos y Diagnósticos</label>
+                            <textarea id="med-antecedentes" rows="4" class="bg-white border border-slate-200 text-xs p-2.5 rounded-xl focus:outline-none focus:border-cyan-500 resize-none font-medium text-slate-700" placeholder="Describe enfermedades crónicas, intervenciones pasadas..."></textarea>
+                        </div>
+
+                        <!-- SECCIÓN DINÁMICA DE ALERGIAS (Badge list + input de inserción rápida) -->
+                        <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl space-y-3">
+                            <span class="text-xs font-bold text-slate-600 block uppercase tracking-wider">🚫 Alergias e Intolerancias</span>
+                            
+                            <!-- Contenedor dinámico de badges -->
+                            <div id="contenedor-alergias" class="flex flex-wrap gap-1.5">
+                                <!-- Badges con botón de borrado se pintan aquí -->
+                            </div>
+
+                            <!-- Input de añadir alergia -->
+                            <div class="flex gap-2">
+                                <input type="text" id="input-nueva-alergia" placeholder="Ej: Penicilina, Gluten, Lactosa..." class="flex-grow bg-white border border-slate-200 text-xs px-3 py-2 rounded-lg focus:outline-none focus:border-red-400">
+                                <button type="button" id="btn-anadir-alergia" class="bg-red-500 hover:bg-red-600 text-white text-xs font-bold px-4 rounded-lg transition-all">
+                                    + Añadir Alergia
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="pt-3 border-t border-slate-100 flex justify-end">
+                            <button type="submit" class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold text-xs uppercase tracking-wider py-2.5 px-6 rounded-xl shadow transition-all">
+                                Actualizar Historial Clínico
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 py-3 text-center text-xs text-slate-400 mt-auto">
+        <div class="flex justify-center items-center gap-1.5">
+            <span class="w-2.5 h-2.5 bg-cyan-500 rounded-full animate-pulse"></span>
+            <span>Módulo Clínico Activo</span>
+        </div>
+    </footer>
+
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/admin-historiales.js"></script>
+</body>
+
+</html>

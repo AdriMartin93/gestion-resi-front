@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GestorResi - Pautas Médicas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col font-sans">
+
+    <!-- Barra de Navegación -->
+    <nav class="bg-white border-b border-slate-200 px-6 py-4 shadow-sm flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center gap-3">
+            <a href="menu.html" class="text-xl font-bold text-sky-600 font-mono tracking-wider hover:opacity-80 transition-opacity">🏢 GESTOR RESI</a>
+            <span class="bg-indigo-50 text-indigo-700 text-xs px-2.5 py-0.5 rounded-full font-medium border border-indigo-200">
+                Gestión de Tratamientos y Pautas Médicas
+            </span>
+        </div>
+        <div>
+            <a href="administracion.html" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold px-4 py-2 rounded-lg border border-slate-300 transition-colors">
+                &larr; Volver a Administración
+            </a>
+        </div>
+    </nav>
+
+    <!-- Contenedor Principal -->
+    <main class="max-w-7xl mx-auto p-6 w-full flex-grow flex flex-col justify-start">
+        
+        <div class="mb-6 border-b border-slate-200 pb-5">
+            <h1 class="text-2xl font-bold text-slate-700 tracking-normal">Pautas Médicas y Prescripciones</h1>
+            <p class="text-xs text-slate-400 mt-1">Supervisión, alta, rectificación y anulación de tratamientos farmacológicos pautados para los residentes.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            
+            <!-- COLUMNA IZQUIERDA: LISTA DE RESIDENTES -->
+            <div class="lg:col-span-4 space-y-4">
+                <div class="flex justify-between items-center px-1">
+                    <h2 class="text-xs font-bold text-slate-600 uppercase tracking-wider">Fichero de Residentes</h2>
+                    <span id="contador-residentes" class="text-[11px] font-bold text-indigo-600 bg-indigo-50 border border-indigo-200 px-2.5 py-0.5 rounded-full">0 expedientes</span>
+                </div>
+                
+                <input type="text" id="buscador-pautas-residente" placeholder="🔍 Buscar por nombre, apellidos o habitación..." class="bg-white border border-slate-200 text-xs p-2.5 rounded-xl w-full focus:outline-none focus:border-indigo-500 shadow-sm">
+
+                <div id="lista-pautas-residentes" class="space-y-3 max-h-[600px] overflow-y-auto pr-1">
+                    <!-- Se carga dinámicamente con JS -->
+                </div>
+            </div>
+
+            <!-- COLUMNA DERECHA: DETALLE DE PAUTAS MÉDICAS -->
+            <div class="lg:col-span-8 space-y-4">
+                
+                <!-- Panel Vacío Informativo -->
+                <div id="panel-pautas-vacio" class="bg-white border border-slate-200 rounded-2xl p-12 text-center text-slate-400 italic text-xs space-y-2 shadow-sm">
+                    <span class="text-3xl block">💊</span>
+                    <p>Selecciona un residente de la lista izquierda para visualizar y gestionar sus pautas médicas activas.</p>
+                </div>
+
+                <!-- Panel de Pautas Activas (Contenedor Principal) -->
+                <div id="panel-pautas-activo" class="hidden space-y-4">
+                    
+                    <!-- Cabecera del Expediente Seleccionado -->
+                    <div class="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm flex justify-between items-center">
+                        <div>
+                            <h2 id="residente-nombre-pautas" class="text-sm font-bold text-slate-700 uppercase tracking-wide">Tratamiento Farmacológico</h2>
+                            <p id="residente-meta-pautas" class="text-[10px] text-slate-400 mt-0.5">Habitación: -- • TIS: --</p>
+                        </div>
+                        <button id="btn-nueva-pauta" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs uppercase tracking-wider px-4 py-2 rounded-xl shadow transition-all">
+                            + Pautar Medicamento
+                        </button>
+                    </div>
+
+                    <!-- Formulario de Nueva Pauta (Colapsable/Ocultable) -->
+                    <div id="contenedor-formulario-pauta" class="hidden bg-white border border-slate-200 p-5 rounded-2xl shadow-sm space-y-4 animate-in fade-in slide-in-from-top-4 duration-200">
+                        <div class="flex justify-between items-center border-b border-slate-100 pb-2">
+                            <h3 class="text-xs font-bold text-slate-600 uppercase tracking-wider flex items-center gap-1.5">🩺 Nueva Prescripción Médica</h3>
+                            <button id="btn-cancelar-formulario" class="text-slate-400 hover:text-slate-600 text-xs font-bold">Cancelar</button>
+                        </div>
+
+                        <form id="form-registrar-pauta" class="space-y-4">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div class="flex flex-col gap-1.5">
+                                    <label class="text-xs font-semibold text-slate-600">Nombre del Medicamento</label>
+                                    <input type="text" id="pauta-medicamento" class="bg-white border border-slate-200 text-xs p-2.5 rounded-xl focus:outline-none focus:border-indigo-500" required placeholder="Ej: Paracetamol 1g">
+                                </div>
+                                <div class="flex flex-col gap-1.5">
+                                    <label class="text-xs font-semibold text-slate-600">Dosis / Posología</label>
+                                    <input type="text" id="pauta-dosis" class="bg-white border border-slate-200 text-xs p-2.5 rounded-xl focus:outline-none focus:border-indigo-500" required placeholder="Ej: 1 comprimido cada 8 horas">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div class="flex flex-col gap-1.5">
+                                    <label class="text-xs font-semibold text-slate-600">Fecha y Hora de Inicio</label>
+                                    <input type="datetime-local" id="pauta-fecha-hora" class="bg-white border border-slate-200 text-xs p-2.5 rounded-xl focus:outline-none focus:border-indigo-500" required>
+                                </div>
+                                <div class="flex flex-col gap-1.5">
+                                    <label class="text-xs font-semibold text-slate-600">Duración del Tratamiento</label>
+                                    <input type="text" id="pauta-duracion" class="bg-white border border-slate-200 text-xs p-2.5 rounded-xl focus:outline-none focus:border-indigo-500" required placeholder="Ej: 7 días, Crónico">
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col gap-1.5">
+                                <label class="text-xs font-semibold text-slate-600">Instrucciones y Observaciones</label>
+                                <textarea id="pauta-observaciones" rows="3" class="bg-white border border-slate-200 text-xs p-2.5 rounded-xl focus:outline-none focus:border-indigo-500 resize-none" placeholder="Indicaciones para administración (Ej: con las comidas, triturar...)"></textarea>
+                            </div>
+
+                            <div class="flex justify-end pt-2">
+                                <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs uppercase tracking-wider py-2.5 px-6 rounded-xl shadow transition-all">
+                                    Guardar Prescripción
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Listado Dinámico de Tratamientos Activos -->
+                    <div id="contenedor-tratamientos-listado" class="space-y-3.5 max-h-[500px] overflow-y-auto pr-1">
+                        <!-- Se renderizará mediante JS -->
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 py-3 text-center text-xs text-slate-400 mt-auto">
+        <div class="flex justify-center items-center gap-1.5">
+            <span class="w-2.5 h-2.5 bg-indigo-500 rounded-full animate-pulse"></span>
+            <span>Módulo de Control Farmacológico Activo</span>
+        </div>
+    </footer>
+
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/admin-pautas-medicas.js"></script>
+</body>
+
+</html>

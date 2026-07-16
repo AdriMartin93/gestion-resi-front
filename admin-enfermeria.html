@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GestorResi - Registros de Enfermería</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col font-sans">
+
+    <nav class="bg-white border-b border-slate-200 px-6 py-4 shadow-sm flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center gap-3">
+            <a href="menu.html" class="text-xl font-bold text-sky-600 font-mono tracking-wider hover:opacity-80 transition-opacity">🏢 GESTOR RESI</a>
+            <span class="bg-rose-50 text-rose-700 text-xs px-2.5 py-0.5 rounded-full font-medium border border-rose-200">
+                Auditoría de Registros de Enfermería
+            </span>
+        </div>
+        <div>
+            <a href="administracion.html" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold px-4 py-2 rounded-lg border border-slate-300 transition-colors">
+                &larr; Volver a Administración
+            </a>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto p-6 w-full flex-grow flex flex-col justify-start">
+        
+        <div class="mb-6 border-b border-slate-200 pb-5">
+            <h1 class="text-2xl font-bold text-slate-700 tracking-normal">Histórico General de Enfermería</h1>
+            <p class="text-xs text-slate-400 mt-1">Supervisión acumulativa de partes médicos, control de tratamientos ejecutados y depuración de registros clínicos erróneos.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            
+            <div class="lg:col-span-4 space-y-4">
+                <div class="bg-white border border-slate-200 p-5 rounded-2xl shadow-sm space-y-4">
+                    <div class="flex flex-col gap-1 border-b border-slate-100 pb-2">
+                        <h3 class="text-xs font-bold text-slate-600 uppercase tracking-wider">📊 Filtros de Auditoría</h3>
+                        <p class="text-[11px] text-slate-400">Busca por residente, profesional o filtra por tipo de acción.</p>
+                    </div>
+
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-xs font-semibold text-slate-600">Buscador en Vivo</label>
+                        <input type="text" id="buscador-enfermeria" placeholder="🔍 Nombre, apellidos, hab. o acción..." class="bg-white border border-slate-200 text-xs p-2.5 rounded-xl w-full focus:outline-none focus:border-rose-500 shadow-sm">
+                    </div>
+
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-xs font-semibold text-slate-600">Filtrar por Fecha</label>
+                        <input type="date" id="filtro-fecha-enfermeria" class="bg-white border border-slate-200 text-xs p-2.5 rounded-xl w-full focus:outline-none focus:border-rose-500 shadow-sm">
+                    </div>
+
+                    <div class="flex gap-2">
+                        <button id="btn-limpiar-filtros" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs py-2 rounded-xl border border-slate-200 transition-all">
+                            Limpiar Filtros
+                        </button>
+                    </div>
+
+                    <div class="text-[10px] text-slate-400 font-medium leading-relaxed bg-slate-50 p-3 rounded-xl border border-slate-200">
+                        ⚠️ <strong>Nota de Seguridad Legal:</strong> La eliminación de un evolutivo médico purgará la descripción de la intervención del expediente clínico de la residencia de forma permanente.
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-8 space-y-4">
+                
+                <div class="flex justify-between items-center px-1">
+                    <h2 class="text-xs font-bold text-slate-600 uppercase tracking-wider">Libro de Intervenciones Médicas</h2>
+                    <span id="contador-registros" class="text-[11px] font-bold text-rose-700 bg-rose-50 border border-rose-200 px-2.5 py-0.5 rounded-full">0 registros</span>
+                </div>
+
+                <div id="contenedor-registros-enfermeria" class="space-y-4 max-h-[650px] overflow-y-auto pr-2">
+                    </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 py-3 text-center text-xs text-slate-400 mt-auto">
+        <div class="flex justify-center items-center gap-1.5">
+            <span class="w-2.5 h-2.5 bg-rose-500 rounded-full animate-pulse"></span>
+            <span>Módulo de Auditoría de Enfermería Activo</span>
+        </div>
+    </footer>
+
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/admin-enfermeria.js"></script>
+</body>
+
+</html>

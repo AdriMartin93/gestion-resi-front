@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GestorResi - Gestión de Residentes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="min-h-screen flex flex-col font-sans">
+
+    <nav
+        class="bg-white border-b border-slate-200 px-6 py-4 shadow-sm flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center gap-3">
+            <a href="menu.html"
+                class="text-xl font-bold text-sky-600 font-mono tracking-wider hover:opacity-80 transition-opacity">🏢
+                GESTOR RESI</a>
+            <span
+                class="bg-slate-100 text-slate-700 text-xs px-2.5 py-0.5 rounded-full font-medium border border-slate-200 flex items-center gap-1">
+                👥 Módulo Residentes
+            </span>
+        </div>
+        <div class="flex items-center gap-4">
+            <a href="menu.html"
+                class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold px-4 py-2 rounded-lg border border-slate-300 transition-colors">
+                &larr; Volver al Menú
+            </a>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto p-6 w-full flex-grow flex flex-col justify-start">
+        <div
+            class="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-200 pb-5">
+            <div>
+                <h1 class="text-2xl font-bold text-slate-700 tracking-normal">Censo de Residentes</h1>
+                <p class="text-xs text-slate-400 mt-1">Gestión de expedientes, asignación de habitaciones e información
+                    asistencial.</p>
+            </div>
+            <button onclick="abrirModalCrear()"
+                class="btn-primary text-xs px-5 py-3 flex items-center gap-2 tracking-wide uppercase">
+                <span>➕</span> Nuevo Residente
+            </button>
+        </div>
+
+        <div id="lista-residentes" class="space-y-3">
+            <div class="text-center py-8 text-slate-400 text-sm">Cargando residentes...</div>
+        </div>
+    </main>
+
+    <!-- 🛠️ MODAL DE FORMULARIO GENERAL (CON SECCIÓN DE MULTI-CONTACTOS) -->
+    <div id="modal-residente"
+        class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center z-50 p-4">
+        <div
+            class="bg-white rounded-2xl border border-slate-200 shadow-xl max-w-lg w-full overflow-hidden scale-95 transition-all card-premium">
+            <div class="bg-slate-50 border-b border-slate-200 px-6 py-4 flex justify-between items-center">
+                <h3 id="modal-titulo" class="text-lg font-bold text-slate-700">Registrar Residente</h3>
+                <button onclick="cerrarModal()"
+                    class="text-slate-400 hover:text-slate-600 text-xl font-bold">&times;</button>
+            </div>
+
+            <form id="form-residente" class="p-6 space-y-4 max-h-[75vh] overflow-y-auto">
+                <input type="hidden" id="residente-id">
+
+                <!-- Datos Personales -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label
+                            class="block text-[11px] font-bold uppercase text-slate-400 tracking-wider mb-1">Nombre</label>
+                        <input type="text" id="modal-res-nombre" required class="w-full input-premium">
+                    </div>
+                    <div>
+                        <label
+                            class="block text-[11px] font-bold uppercase text-slate-400 tracking-wider mb-1">Apellidos</label>
+                        <input type="text" id="modal-res-apellidos" required class="w-full input-premium">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase text-slate-400 tracking-wider mb-1">DNI /
+                            NIE</label>
+                        <input type="text" id="modal-res-dni" required placeholder="12345678A"
+                            class="w-full input-premium">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase text-slate-400 tracking-wider mb-1">Tarjeta
+                            TIS</label>
+                        <input type="text" id="modal-res-tis" required class="w-full input-premium">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[11px] font-bold uppercase text-slate-400 tracking-wider mb-1">Fecha
+                            Nacimiento</label>
+                        <input type="date" id="modal-res-fecha" required class="w-full input-premium">
+                    </div>
+                    <div>
+                        <label
+                            class="block text-[11px] font-bold uppercase text-slate-400 tracking-wider mb-1">Habitación</label>
+                        <input type="text" id="modal-res-habitacion" required placeholder="Ej: 104-A"
+                            class="w-full input-premium">
+                    </div>
+                </div>
+
+                <!-- ➕ NUEVA SUBSECCIÓN: AGREGAR CONTACTOS AL EXPEDIENTE -->
+                <div class="border-t border-slate-200 pt-4 space-y-3">
+                    <h4 class="text-xs font-bold uppercase text-slate-400 tracking-wider">Contactos de Emergencia</h4>
+
+                    <!-- Pre-formulario rápido interno para añadir a la lista temporal -->
+                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 space-y-2">
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="text" id="form-con-nombre" placeholder="Nombre completo"
+                                class="w-full input-premium py-1.5 text-xs">
+                            <input type="text" id="form-con-parentesco" placeholder="Parentesco (Hijo, hermano...)"
+                                class="w-full input-premium py-1.5 text-xs">
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="tel" id="form-con-telefono" placeholder="Teléfono"
+                                class="w-full input-premium py-1.5 text-xs">
+                            <input type="email" id="form-con-email" placeholder="Email (Opcional)"
+                                class="w-full input-premium py-1.5 text-xs">
+                        </div>
+                        <div class="flex justify-end">
+                            <button type="button" onclick="agregarContactoALaListaTemporal()"
+                                class="bg-sky-50 text-sky-700 border border-sky-200 hover:bg-sky-100 text-[11px] font-bold px-3 py-1 rounded-lg transition-colors">
+                                + Añadir a la Lista
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Lista visual de contactos añadidos en el modal -->
+                    <div id="lista-contactos-temporal" class="space-y-1.5 max-h-32 overflow-y-auto">
+                        <!-- Se auto-rellenan aquí con JavaScript -->
+                    </div>
+                </div>
+
+                <div class="pt-4 flex justify-end gap-3 border-t border-slate-100">
+                    <button type="button" onclick="cerrarModal()" class="btn-secondary px-4 py-2.5">Cancelar</button>
+                    <button type="submit" class="btn-primary px-5 py-2.5">Guardar Residente</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 🏥 MODAL DE GESTIÓN CLÍNICA -->
+    <div id="modal-salud"
+        class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center z-50 p-4">
+        <div
+            class="bg-white rounded-2xl border border-slate-200 shadow-xl max-w-xl w-full overflow-hidden scale-95 transition-all card-premium">
+            <div class="bg-slate-50 border-b border-slate-200 px-6 py-4 flex justify-between items-center">
+                <h3 class="text-lg font-bold text-slate-700">Ficha Clínica de <span id="modal-salud-nombre"
+                        class="text-sky-600"></span></h3>
+                <button onclick="cerrarModalSalud()"
+                    class="text-slate-400 hover:text-slate-600 text-xl font-bold">&times;</button>
+            </div>
+
+            <div class="p-6 space-y-6 max-h-[75vh] overflow-y-auto">
+                <!-- SECCIÓN 1: EDITAR HISTORIAL MÉDICO -->
+                <form id="form-historial" class="space-y-4">
+                    <input type="hidden" id="modal-historial-id">
+                    <h4
+                        class="text-xs font-bold uppercase text-slate-400 tracking-wider border-b border-slate-100 pb-1">
+                        1. Parámetros del Historial</h4>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">G.
+                                Sanguíneo</label>
+                            <input type="text" id="modal-his-sangre" placeholder="Ej: A+" class="w-full input-premium">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Movilidad</label>
+                            <input type="text" id="modal-his-movilidad" placeholder="Ej: Reducida"
+                                class="w-full input-premium">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Dieta</label>
+                            <input type="text" id="modal-his-dieta" placeholder="Ej: Hiposódica"
+                                class="w-full input-premium">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Antecedentes
+                            Clínicos</label>
+                        <textarea id="modal-his-antecedentes" rows="2"
+                            class="w-full input-premium font-mono text-xs"></textarea>
+                    </div>
+                    <div class="flex justify-end">
+                        <button type="submit" class="btn-primary text-[10px] px-4 py-2 tracking-wide">Actualizar
+                            Ficha</button>
+                    </div>
+                </form>
+
+                <!-- SECCIÓN 2: AÑADIR NUEVA PAUTA MÉDICA -->
+                <form id="form-pauta" class="space-y-4 border-t border-slate-200 pt-4">
+                    <h4
+                        class="text-xs font-bold uppercase text-slate-400 tracking-wider border-b border-slate-100 pb-1">
+                        2. Prescribir Nueva Pauta</h4>
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="col-span-1">
+                            <label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Medicamento</label>
+                            <input type="text" id="modal-pau-medicamento" required placeholder="Ej: Nolotil"
+                                class="w-full input-premium">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Dosis</label>
+                            <input type="text" id="modal-pau-dosis" required placeholder="Ej: 1 amp"
+                                class="w-full input-premium">
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Duración</label>
+                            <input type="text" id="modal-pau-duracion" required placeholder="Ej: Crónico"
+                                class="w-full input-premium">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Observaciones</label>
+                        <input type="text" id="modal-pau-obs" placeholder="Ej: Tomar tras el desayuno"
+                            class="w-full input-premium">
+                    </div>
+                    <div class="flex justify-end">
+                        <button type="submit"
+                            class="btn-primary text-[10px] px-4 py-2 tracking-wide bg-emerald-600 hover:bg-emerald-700">Añadir
+                            Medicación</button>
+                    </div>
+                </form>
+            </div>
+            <div class="bg-slate-50 px-6 py-3 border-t border-slate-200 flex justify-end">
+                <button type="button" onclick="cerrarModalSalud()" class="btn-secondary text-[11px] px-4 py-2">Cerrar
+                    Gestión</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MOLDE TEMPLATE -->
+    <template id="template-residente">
+        <div class="card-premium overflow-hidden mb-3">
+            <div class="p-4 flex justify-between items-center cursor-pointer btn-detalles">
+                <div class="flex items-center gap-3">
+                    <div
+                        class="avatar w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center text-sm font-bold border border-emerald-200">
+                    </div>
+                    <div>
+                        <span class="nombre-completo font-semibold text-sm text-slate-700"></span>
+                        <span
+                            class="badge-habitacion ml-2 inline-block bg-slate-100 text-slate-600 text-[10px] font-bold px-2 py-0.5 rounded-md border border-slate-200"></span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button class="btn-editar text-slate-400 hover:text-sky-600 p-1 transition-colors">✏️</button>
+                    <button class="btn-borrar text-slate-400 hover:text-red-600 p-1 transition-colors">🗑️</button>
+                </div>
+            </div>
+
+            <div
+                class="detalles-box hidden border-t border-slate-100 bg-slate-50/50 p-4 text-xs font-mono grid grid-cols-2 gap-4">
+                <div><strong>Documento DNI:</strong> <span class="txt-dni"></span></div>
+                <div><strong>Código Sanitario TIS:</strong> <span class="txt-tis"></span></div>
+                <div><strong>Fecha Nacimiento:</strong> <span class="txt-fecha"></span></div>
+                <div><strong>Ubicación Hab:</strong> <span class="txt-habitacion"></span></div>
+
+                <div class="col-span-2 border-t border-slate-200 pt-2">
+                    <strong class="block mb-1 text-slate-500 font-sans uppercase tracking-wider text-[10px]">Contactos
+                        de Emergencia:</strong>
+                    <div class="contenedor-contactos space-y-1 font-sans text-[11px] text-slate-600"></div>
+                </div>
+
+                <div
+                    class="seccion-salud col-span-2 hidden border-t border-slate-200 pt-3 mt-1 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- RECUADRO A -->
+                    <div class="bg-white border border-slate-200 p-4 rounded-xl shadow-sm space-y-2">
+                        <div class="flex justify-between items-center border-b border-slate-100 pb-1.5 mb-2">
+                            <span
+                                class="font-sans font-bold text-slate-700 text-[11px] uppercase tracking-wide flex items-center gap-1">📋
+                                Historial Médico</span>
+                            <div class="flex items-center gap-2">
+                                <span
+                                    class="badge-sangre bg-red-50 text-red-700 text-[10px] font-bold px-2 py-0.5 rounded border border-red-100"></span>
+                                <button
+                                    class="btn-editar-salud text-sky-600 hover:text-sky-800 font-sans font-bold text-[10px] uppercase tracking-wider bg-sky-50 px-2 py-0.5 rounded border border-sky-200 transition-colors">✏️
+                                    Editar Salud</button>
+                            </div>
+                        </div>
+                        <div class="text-[11px] font-sans text-slate-600 space-y-1">
+                            <div><strong>Movilidad:</strong> <span class="txt-movilidad"></span></div>
+                            <div><strong>Dieta:</strong> <span class="txt-dieta"></span></div>
+                            <div class="pt-1"><strong>Antecedentes:</strong></div>
+                            <p
+                                class="txt-antecedentes bg-slate-50 p-2 rounded border border-slate-200 text-slate-700 font-mono text-[10px] leading-relaxed max-h-24 overflow-y-auto">
+                            </p>
+                            <div class="pt-1"><strong>Alergias:</strong></div>
+                            <div class="contenedor-alergias flex flex-wrap gap-1"></div>
+                        </div>
+                    </div>
+
+                    <!-- RECUADRO B -->
+                    <div class="bg-white border border-slate-200 p-4 rounded-xl shadow-sm flex flex-col">
+                        <div class="border-b border-slate-100 pb-1.5 mb-2">
+                            <span
+                                class="font-sans font-bold text-slate-700 text-[11px] uppercase tracking-wide flex items-center gap-1">💊
+                                Pauta Farmacéutica</span>
+                        </div>
+                        <div class="contenedor-pautas flex-grow overflow-y-auto max-h-48 space-y-2 pr-1 font-sans">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+    <!-- Busca el final de </template> de "template-residente" y pega esto justo debajo -->
+    
+    <!-- 👁️ NUEVO MOLDE PARA CONTACTOS DE EMERGENCIA -->
+    <template id="template-contacto">
+        <div class="bg-white border border-slate-200 px-3 py-1.5 rounded-lg text-slate-600 flex justify-between items-center">
+            <div>
+                <span class="txt-con-nombre font-bold text-slate-700"></span> 
+                <span class="txt-con-parentesco text-slate-400 text-[10px]"></span>
+                <span class="txt-con-telefono ml-3 text-slate-500"></span>
+                <span class="txt-con-email ml-2 text-slate-400"></span>
+            </div>
+        </div>
+    </template>
+
+    
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/residentes.js"></script>
+</body>
+
+</html>
