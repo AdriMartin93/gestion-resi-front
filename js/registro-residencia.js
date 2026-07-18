@@ -6,11 +6,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+
 /**
  * Valida un formato estándar de CIF español mediante expresiones regulares.
  */
 function validarCIF(cif) {
-    const regexCif = /^[A-HJ-NP-SU-W0-9][0-9]{7}[A-J0-9]$/;
+    const regexCif = /^[A-HJ-NP-SU-W0-9][0-9]{8}$/;
     return regexCif.test(cif);
 }
 

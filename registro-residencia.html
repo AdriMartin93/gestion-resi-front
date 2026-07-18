@@ -26,67 +26,57 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs text-slate-500 mb-1 font-medium">Nombre Comercial</label>
-                        <input id="emp-nombre" type="text" required
-                            class="w-full input-premium">
+                        <input id="emp-nombre" type="text" required class="w-full input-premium">
                     </div>
                     <div>
                         <label class="block text-xs text-slate-500 mb-1 font-medium">CIF (Ej: A1234567B)</label>
-                        <input id="emp-cif" type="text" required
-                            pattern="^[A-HJ-NP-SU-W0-9][0-9]{7}[A-J0-9]$"
-                            title="Introduce un CIF válido (1 letra inicial, 7 números y 1 dígito de control final)."
+                        <input id="emp-cif" type="text" required pattern="^[A-HJ-NP-SU-W0-9][0-9]{8}$"
+                            title="Introduce un CIF válido (1 letra inicial seguida de 8 dígitos)."
                             class="w-full input-premium">
                     </div>
                     <div class="md:col-span-2">
                         <label class="block text-xs text-slate-500 mb-1 font-medium">Email de la Empresa</label>
-                        <input id="emp-email" type="email" required
-                            class="w-full input-premium">
+                        <input id="emp-email" type="email" required class="w-full input-premium">
                     </div>
                 </div>
             </div>
 
             <!-- SECCIÓN: ADMINISTRADOR -->
             <div>
-                <h3 class="text-xs font-bold text-sky-600 uppercase tracking-wider mb-3"> Cuenta del Director / Administrador</h3>
+                <h3 class="text-xs font-bold text-sky-600 uppercase tracking-wider mb-3"> Cuenta del Director /
+                    Administrador</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs text-slate-500 mb-1 font-medium">Nombre</label>
-                        <input id="adm-nombre" type="text" required
-                            class="w-full input-premium">
+                        <input id="adm-nombre" type="text" required class="w-full input-premium">
                     </div>
                     <div>
                         <label class="block text-xs text-slate-500 mb-1 font-medium">Apellidos</label>
-                        <input id="adm-apellidos" type="text" required
-                            class="w-full input-premium">
+                        <input id="adm-apellidos" type="text" required class="w-full input-premium">
                     </div>
                     <div>
                         <label class="block text-xs text-slate-500 mb-1 font-medium">DNI / NIE</label>
-                        <input id="adm-dni" type="text" required
-                            pattern="^[XYZ0-9][0-9]{7}[A-Z]$"
+                        <input id="adm-dni" type="text" required pattern="^[XYZ0-9][0-9]{7}[A-Z]$"
                             title="Introduce un DNI (8 números y 1 letra) o NIE (1 letra inicial, 7 números y 1 letra final) válido."
                             class="w-full input-premium">
                     </div>
                     <div>
                         <label class="block text-xs text-slate-500 mb-1 font-medium">Nombre de Usuario</label>
-                        <input id="adm-usuario" type="text" required
-                            class="w-full input-premium">
+                        <input id="adm-usuario" type="text" required class="w-full input-premium">
                     </div>
                     <div>
                         <label class="block text-xs text-slate-500 mb-1 font-medium">Email Personal</label>
-                        <input id="adm-email" type="email" required
-                            class="w-full input-premium">
+                        <input id="adm-email" type="email" required class="w-full input-premium">
                     </div>
                     <div>
                         <label class="block text-xs text-slate-500 mb-1 font-medium">Contraseña</label>
-                        <input id="adm-pass" type="password" required
-                            minlength="6"
-                            title="La contraseña debe tener al menos 6 caracteres."
-                            class="w-full input-premium">
+                        <input id="adm-pass" type="password" required minlength="6"
+                            title="La contraseña debe tener al menos 6 caracteres." class="w-full input-premium">
                     </div>
                 </div>
             </div>
 
-            <button type="submit"
-                class="w-full btn-primary text-white font-bold py-3 mt-2 shadow-md">
+            <button type="submit" class="w-full btn-primary text-white font-bold py-3 mt-2 shadow-md">
                 Registrar Residencia
             </button>
         </form>
