@@ -20,6 +20,7 @@
             <p class="text-xs text-slate-500 mt-2">Panel de Control y Gestión Asistencial</p>
         </div>
 
+
         <div class="flex flex-col gap-4">
             <!-- Botón de Iniciar Sesión -->
             <a href="login.html"
@@ -38,6 +39,56 @@
             Backend Architecture System v1.0
         </div>
     </div>
+
+    <!-- Modal / Alerta Flotante Cerrable -->
+    <div id="demoModal"
+        class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 transition-opacity duration-300">
+        <div
+            class="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-sm w-full p-6 text-center relative animate-bounce-short">
+            <!-- Botón X para cerrar -->
+            <button onclick="cerrarAlertaDemo()"
+                class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 text-xl font-bold w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100 transition">
+                &times;
+            </button>
+
+            <div
+                class="w-12 h-12 bg-sky-100 text-sky-600 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">
+                🚀
+            </div>
+
+            <h3 class="text-lg font-bold text-slate-800 mb-1">Modo Demostración</h3>
+            <p class="text-xs text-slate-500 mb-4">
+                Puedes explorar la plataforma sin necesidad de registrarte con las credenciales demo:
+            </p>
+
+            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200 text-left font-mono text-xs space-y-2 mb-5">
+                <div class="flex justify-between items-center">
+                    <span class="text-slate-500">Usuario:</span>
+                    <span
+                        class="font-bold text-sky-700 bg-white px-2 py-1 rounded border border-slate-200">adminDemo</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-slate-500">Contraseña:</span>
+                    <span
+                        class="font-bold text-sky-700 bg-white px-2 py-1 rounded border border-slate-200">admin123</span>
+                </div>
+            </div>
+
+            <button onclick="cerrarAlertaDemo()"
+                class="w-full py-2.5 bg-sky-600 hover:bg-sky-700 text-white font-semibold rounded-xl text-xs transition shadow-sm">
+                Entendido
+            </button>
+        </div>
+    </div>
+
+    <!-- Script de control -->
+    <script>
+        function cerrarAlertaDemo() {
+            const modal = document.getElementById('demoModal');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            setTimeout(() => modal.remove(), 300);
+        }
+    </script>
 
 </body>
 
